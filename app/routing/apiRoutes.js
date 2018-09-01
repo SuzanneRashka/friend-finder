@@ -1,9 +1,3 @@
-// var path = require("path");
-// var express = require("express");
-// var bodyParser = require("body-parser");
-// var path = require("path");
-// var app = express();
-// var router = new express.Router();
 var friends = require("../data/friends.js");
 
 
@@ -16,38 +10,34 @@ module.exports = function (app) {
 
 
     // A POST routes /api/friends. This will be used to handle incoming survey results. This route will also be used to handle the compatibility logic.
-    app.post("/api/friends", function (req, res) {
-
+    app.post('/api/friends', function (req, res) {
+        //placeholder for newly created buddy
         var match = {
             name: "",
             photo: "",
-            friendDiff: 100
+            friendDifference: 1000
         };
 
-        var totDiff = 0;
-
+        var userScores = req.body.scores;
+        var totalDifference = 0;
+        // loop through friends
         for (var i = 0; i < friends.length; i++) {
-            console.log(friends[i].name);
-            totDiff = 0;
-            for (var j = 0; i < friends[i].score[j]; j++) {
-                totDiff += Math.abs(parseInt(req.body.score[j]) - parseInt(friends[i].score[j]));
-                if (totDiff <= match.friendDiff) {
-                    // Reset the bestMatch to be the new friend. 
+            totalDifference = 0;
+            // loop through scores of friends
+            for (var j = 0; j < friends[i].scores[j]; j++) {
+                totalDifference += Math.abs(parseInt(userScores[j]) - parseInt(friends[i].scores[j]));
+                if (totalDifference <= match.friendDifference) {
+                    // Reset the match to be the new friend. 
                     match.name = friends[i].name;
                     match.photo = friends[i].photo;
-                    match.friendDiff = totDiff;
+                    match.friendDifference = totalDifference;
                 }
             }
         }
-        friends.push(res.body);
+        // save the user's data to the database
+        friends.push(req.body);
+
         res.json(match);
-    }); // end post
+
+    });
 } // end module
-
-// function add() {
-//     var numbers = [1, 1, 1, 1, 6];
-
-//     function getSum(total, num) {
-//         return total + num;
-//     }
-//     numbers.reduce(getSum);

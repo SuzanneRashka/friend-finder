@@ -15,6 +15,7 @@ app.use(bodyParser.json());
 
 // app.use("./app/routing/apiRoutes", app);
 // app.use("./app/routing/htmlRoutes", app);
+// app.use(express.static);
 
 require("./app/routing/apiRoutes")(app);
 require("./app/routing/htmlRoutes")(app);
